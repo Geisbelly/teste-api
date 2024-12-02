@@ -2,9 +2,18 @@
 
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
+import { acquireToken } from '../../../services/authAzure'; // Importa a função de autenticação
 
 export async function GET() {
   try {
+    // Adquire o token de autenticação do Azure
+    const token = await acquireToken();
+
+    // Verifica se o token foi obtido com sucesso
+    if (!token) {
+      return NextResponse.json({ error: 'Falha na autenticação com o Azure' }, { status: 401 });
+    }
+
     const pool = await getDbConnection();
 
     const result = await pool.request().query(`
@@ -58,13 +67,25 @@ GROUP BY
     // Processar para garantir que os valores sejam JSON corretos
     const processedResult = result.recordset.map(item => ({
       ...item,
-      avatarIcone: item.avatarIcone ? JSON.parse(item.avatarIcone) : null,
-      avanco: item.avanco ? JSON.parse(item.avanco) : null,
+      avatarIcone: (() => {
+        try {
+          return item.avatarIcone ? JSON.parse(item.avatarIcone) : null;
+        } catch {
+          return null;
+        }
+      })(),
+      avanco: (() => {
+        try {
+          return item.avanco ? JSON.parse(item.avanco) : null;
+        } catch {
+          return null;
+        }
+      })(),
       friends: item.friends ? item.friends.split(', ') : [],
-      missoes: item.missoes ? item.missoes.split(', ') : []
+      missoes: item.missoes ? item.missoes.split(', ') : [],
     }));
 
-    return NextResponse.json(processedResult);  // Retorna os dados como JSON
+    return NextResponse.json(processedResult); // Retorna os dados como JSON
 
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
