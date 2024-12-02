@@ -1,20 +1,18 @@
 import sql from 'mssql';
 
 const dbConfig = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  server: process.env.DB_SERVER,
-  database: process.env.DB_DATABASE,
+  user: process.env.DB_USER || '', // Defina as variáveis no Vercel
+  password: process.env.DB_PASSWORD || '',
+  server: process.env.DB_SERVER || '',
+  database: process.env.DB_DATABASE || '',
   options: {
-    encrypt: true,
-    trustServerCertificate: true,
-    // Adicione o limite de conexões se necessário
-    connectionTimeout: 30000, // Tempo de timeout da conexão em milissegundos
+    encrypt: true, // Necessário para Azure
+    trustServerCertificate: true, // Pode ser necessário para evitar problemas de certificado
+    connectionTimeout: 30000, // Timeout de conexão para garantir que não falhe facilmente
   },
 };
 
-
-// Função para garantir que todas as variáveis estejam definidas
+// Verifica se as variáveis de ambiente estão corretamente configuradas
 const isDbConfigValid = () => {
   return (
     dbConfig.user !== '' &&
@@ -26,11 +24,14 @@ const isDbConfigValid = () => {
 
 export const getDbConnection = async () => {
   if (!isDbConfigValid()) {
+    console.error('Configuração do banco de dados está incompleta');
     throw new Error('Configuração do banco de dados está incompleta.');
   }
 
   try {
-    const pool = await sql.connect(dbConfig); // Agora, todas as variáveis de ambiente estão garantidamente definidas
+    console.log('Tentando conectar ao banco de dados...');
+    const pool = await sql.connect(dbConfig);
+    console.log('Conexão com o banco de dados estabelecida!');
     return pool;
   } catch (error) {
     console.error('Erro ao conectar ao banco de dados:', error);
