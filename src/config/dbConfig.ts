@@ -1,15 +1,18 @@
 import sql from 'mssql';
 
 const dbConfig = {
-  user: process.env.DB_USER || '', // Se não estiver definido, coloca um valor default
-  password: process.env.DB_PASSWORD || '', // Se não estiver definido, coloca um valor default
-  server: process.env.DB_SERVER || '', // Se não estiver definido, coloca um valor default
-  database: process.env.DB_DATABASE || '', // Se não estiver definido, coloca um valor default
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_SERVER,
+  database: process.env.DB_DATABASE,
   options: {
-    encrypt: true, // Necessário para o Azure
+    encrypt: true,
     trustServerCertificate: true,
+    // Adicione o limite de conexões se necessário
+    connectionTimeout: 30000, // Tempo de timeout da conexão em milissegundos
   },
 };
+
 
 // Função para garantir que todas as variáveis estejam definidas
 const isDbConfigValid = () => {
