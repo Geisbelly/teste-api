@@ -21,6 +21,14 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "/api/:path"
+      }
+    ]
+  }
   
 };
 

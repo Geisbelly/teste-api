@@ -4,19 +4,6 @@
       "src": "next.config.js",
       "use": "@vercel/next"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/old-route",
-      "destination": "/new-route",
-      "permanent": true
-    }
   ]
 }
 
