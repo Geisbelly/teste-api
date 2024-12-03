@@ -2,12 +2,10 @@ import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
 import { error } from 'console';
 
-const pool = await getDbConnection();
+
 
 export async function GET(req: Request) {
-  try {
-    
-    const reqUrl = new URL(req.url);
+  const reqUrl = new URL(req.url);
     const pathname = reqUrl.pathname; // Obtém '/api/categorias/Livros'
     const lastPart = pathname.split('/').pop(); // Extrai 'Livros'
     const id = lastPart;
@@ -18,6 +16,10 @@ export async function GET(req: Request) {
         { status: 400 }
       );
     }
+
+  try {
+    
+    const pool = await getDbConnection();
 
     const result = await pool
       .request()
