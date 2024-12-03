@@ -9,7 +9,7 @@ const data = {
 async function createConquista() {
   try {
     // Enviar a requisição POST
-    const response = await fetch('https://api-verbix.vercel.app/api/conquistas', {
+    const response = await fetch('https://api-verbix.vercel.app/api/conquistas/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Indica que estamos enviando dados em JSON
@@ -30,4 +30,4 @@ async function createConquista() {
 }
 
 // Chama a função para criar a conquista
-createConquista();
+export default createConquista;
