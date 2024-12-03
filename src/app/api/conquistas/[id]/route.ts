@@ -4,7 +4,8 @@ import { getDbConnection } from '../../../../config/dbConfig';
 // Função GET para buscar a conquista pelo ID
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = params; // Obtém o 'id' dos parâmetros da URL
+    // O acesso ao `params` precisa ser feito de forma assíncrona
+    const { id } = await params;
 
     // Verifica se o 'id' foi fornecido
     if (!id) {
