@@ -1,34 +1,17 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
 
-export async function GET() {
-  try {
-    const pool = await getDbConnection();
-
-    // Fazendo a consulta para pegar todas as conquistas
-    const result = await pool.request().query(`
-      SELECT * FROM CONQUISTAS
-    `);
-
-    // Retorna os dados como JSON
-    return NextResponse.json(result.recordset);
-  } catch (error) {
-    console.error('Erro ao buscar conquistas:', error);
-    return NextResponse.json({ error: 'Erro ao buscar os dados das conquistas' }, { status: 500 });
-  }
-}
-
 export async function POST(req: Request) {
   // Configuração básica de CORS
   const corsHeaders = {
-    'Access-Control-Allow-Origin': 'http://localhost:3000', // Substitua '*' por 'http://localhost:3000' para domínio específico
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Origin': 'http://localhost:3000', // Permite o frontend local
+    'Access-Control-Allow-Methods': 'POST, OPTIONS', // Métodos permitidos
+    'Access-Control-Allow-Headers': 'Content-Type', // Cabeçalhos permitidos
   };
 
   // Responde ao preflight request do CORS
   if (req.method === 'OPTIONS') {
-    return new NextResponse(null, { status: 200, headers: corsHeaders });
+    return new NextResponse(null, { status: 204, headers: corsHeaders }); // Status 204 para requisições preflight
   }
 
   try {
@@ -78,3 +61,22 @@ export async function POST(req: Request) {
     );
   }
 }
+
+
+export async function GET() {
+  try {
+    const pool = await getDbConnection();
+
+    // Fazendo a consulta para pegar todas as conquistas
+    const result = await pool.request().query(`
+      SELECT * FROM CONQUISTAS
+    `);
+
+    // Retorna os dados como JSON
+    return NextResponse.json(result.recordset);
+  } catch (error) {
+    console.error('Erro ao buscar conquistas:', error);
+    return NextResponse.json({ error: 'Erro ao buscar os dados das conquistas' }, { status: 500 });
+  }
+}
+
