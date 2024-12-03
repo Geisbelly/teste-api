@@ -15,7 +15,7 @@ export async function GET(req: Request, context: { params: { id: string } }) {
       .input('id', id)
       .query(`
         SELECT * 
-        FROM CATEGORIAS 
+        FROM CATEGORIA
         WHERE NOME = @id;
       `);
 
