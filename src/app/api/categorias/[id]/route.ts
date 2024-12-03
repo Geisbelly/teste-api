@@ -1,9 +1,12 @@
+'use client'
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+import * as React from 'react'
+
+export async function GET(context: { params: { id: string } }){
   try {
-    const { id } = params;
+    const { id } = await  context.params;
 
     if (!id) {
       return NextResponse.json({ error: 'ID da categoria não fornecido' }, { status: 400 });
