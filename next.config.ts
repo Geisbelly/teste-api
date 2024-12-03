@@ -1,5 +1,6 @@
 // next.config.js
 const nextConfig = {
+  
   reactStrictMode: true, // Habilita o modo estrito para identificar problemas no React
   env: {
     DB_USER: process.env.DB_USER,
@@ -22,5 +23,7 @@ const nextConfig = {
   },
   
 };
+
+
 
 export default nextConfig; // Exportação correta para Next.js 13+

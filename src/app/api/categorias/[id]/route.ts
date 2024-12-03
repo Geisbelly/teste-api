@@ -1,51 +1,42 @@
+// src/pages/api/categorias/[id]/route.ts
 import { NextResponse } from 'next/server';
-import { getDbConnection } from '../../../../config/dbConfig';
-import { error } from 'console';
 
+interface Categoria{
+  NOME: string,
+  DESCRICAO: string
+}
 
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params;
 
-export async function GET(req: Request) {
-  const reqUrl = new URL(req.url);
-    const pathname = reqUrl.pathname; // Obtém '/api/categorias/Livros'
-    const lastPart = pathname.split('/').pop(); // Extrai 'Livros'
-    const id = lastPart;
+  if (!id) {
+    return NextResponse.json({ error: 'ID da categoria não fornecido' }, { status: 400 });
+  }
 
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Slug não fornecido' },
-        { status: 400 }
-      );
-    }
+  // Aqui você pode fazer a consulta à sua base de dados
+  const categoria = await fetchCategoriaById(id);
 
+  if (!categoria) {
+    return NextResponse.json({ error: 'Categoria não encontrada' }, { status: 404 });
+  }
+
+  return NextResponse.json(categoria);
+}
+
+// Função simulada para buscar a categoria
+async function fetchCategoriaById(id: string) {
   try {
-    
-    const pool = await getDbConnection();
+    // Aqui simulamos uma chamada para a API que retorna todas as categorias
+    const response = await fetch(`http://localhost:3000/api/categorias`);
+    const categorias = await response.json();
 
-    const result = await pool
-      .request()
-      .input('id', id)
-      .query(`
-        SELECT * 
-        FROM CATEGORIA
-        WHERE NOME = @id;
-      `);
 
-    if (result.recordset.length === 0) {
-      console.log(error, 'Caregoria não encontrada')
-      return NextResponse.json(
-        { error: 'Categoria não encontrada' },
-        { status: 404 }
-      );
-    }
+    // Encontre a categoria que corresponde ao 'id'
+    const categoria = categorias.find((categoria: Categoria) => categoria.NOME === id);
 
-    const categoria = result.recordset[0];
-
-    return NextResponse.json(categoria);
+    return categoria;
   } catch (error) {
-    console.error('Erro ao buscar categoria:', error);
-    return NextResponse.json(
-      { error: 'Erro ao buscar a categoria' },
-      { status: 500 }
-    );
+    console.error('Erro ao buscar categorias:', error);
+    return null;
   }
 }
