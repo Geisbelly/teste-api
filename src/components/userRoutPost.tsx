@@ -1,18 +1,23 @@
 const criarUsuario = async () => {
     // Dados do usuário
     const body = {
-        username: 'exemplo', // O 'usekey' que será criado
+        username: 'exemplo',
         email: 'exemplo@dominio.com',
-        chave: 'chave_aleatoria_123', // A chave que será associada
+        nome: 'Novo Usuário',
+        anonascimento: '2000-01-01',
+        avatar: 'Erica',
       };
       
-      const res = await fetch('/api/chaves_keys_users_points/acess/post/user', {
+      fetch('/api/users/post', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body),
-      });
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Erro:', error));
       
   };
   
