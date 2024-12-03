@@ -1,6 +1,7 @@
+// next.config.js
 const nextConfig = {
   reactStrictMode: true, // Habilita o modo estrito para identificar problemas no React
-  swcMinify: true, // Utiliza o SWC para minificação
+  swcMinify: true, // Utiliza o SWC para minificação (não é mais necessário definir explicitamente a minificação, mas você pode manter se quiser)
   env: {
     DB_USER: process.env.DB_USER,
     DB_PASSWORD: process.env.DB_PASSWORD,
@@ -13,7 +14,7 @@ const nextConfig = {
         source: '/api/:path*',
         headers: [
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
-          { key: 'Access-Control-Allow-Origin', value: 'https://api-verbix.vercel.app/' }, // Substitua '*' pelo domínio confiável em produção
+          { key: 'Access-Control-Allow-Origin', value: '*' }, // Certifique-se de que o domínio está correto (inclua o protocolo 'https://')
           { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
           { key: 'Access-Control-Allow-Headers', value: 'X-Requested-With, Content-Type, Authorization' },
         ],
@@ -22,4 +23,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig; // Exportação correta para Next.js 13+
