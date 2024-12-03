@@ -1,14 +1,12 @@
 import { NextResponse } from 'next/server';
-import { NextApiRequest } from 'next';
 import { getDbConnection } from '../../../../../config/dbConfig';
 
-type Params = {
-  id: string;
-};
-
-export async function GET(request: NextApiRequest, { params }: { params: Params }) {
+export async function GET(req: Request) {
   try {
-    const { id } = params;
+    const reqUrl = new URL(req.url);
+    const pathname = reqUrl.pathname; // Obtém '/api/categorias/Livros'
+    const lastPart = pathname.split('/').pop(); // Extrai 'Livros'
+    const id = lastPart;
 
     if (!id) {
       return NextResponse.json({ error: 'ID do user não fornecido' }, { status: 400 });
