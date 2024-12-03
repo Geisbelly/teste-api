@@ -27,7 +27,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 async function fetchCategoriaById(id: string) {
   try {
     // Aqui simulamos uma chamada para a API que retorna todas as categorias
-    const response = await fetch(`http://localhost:3000/api/categorias`);
+    const response = await fetch(`https://api-verbix.vercel.app/api/categorias`);
     const categorias = await response.json();
 
 

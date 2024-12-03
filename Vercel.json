@@ -4,6 +4,29 @@
       "src": "next.config.js",
       "use": "@vercel/next"
     }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/old-route",
+      "destination": "/new-route",
+      "permanent": true
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/sync-slack-team/T0CAQ10TZ",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/sync-slack-team/T4BOE34OP",
+      "schedule": "0 5 * * *"
+    }
   ]
 }
 
