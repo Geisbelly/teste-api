@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
 
-export async function GET(req: Request, context: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = context.params;  // Acessando o parâmetro "id" de forma correta
+    const { id } = params;
 
     if (!id) {
       return NextResponse.json({ error: 'ID da categoria não fornecido' }, { status: 400 });
