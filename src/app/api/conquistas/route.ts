@@ -1,5 +1,3 @@
-// /app/api/getAllUsers/route.ts
-
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
 
@@ -14,7 +12,6 @@ export async function GET() {
 
     // Retorna os dados como JSON
     return NextResponse.json(result.recordset);
-
   } catch (error) {
     console.error('Erro ao buscar conquistas:', error);
     return NextResponse.json({ error: 'Erro ao buscar os dados das conquistas' }, { status: 500 });
@@ -22,21 +19,20 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  // Configuração básica de CORS
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*', // Substitua '*' por 'http://localhost:3000' para domínio específico
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
 
-  const headers = new Headers();
-  headers.set('Access-Control-Allow-Origin', '*'); // Permitir todos os domínios (substitua '*' por 'http://localhost:3000' para um domínio específico)
-  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  headers.set('Access-Control-Allow-Headers', 'Content-Type');
-
-  // Verifique o método da requisição
+  // Responde ao preflight request do CORS
   if (req.method === 'OPTIONS') {
-    // Responde ao preflight request do CORS
-    return new NextResponse(null, { status: 200, headers });
+    return new NextResponse(null, { status: 200, headers: corsHeaders });
   }
 
   try {
     const body = await req.json();
-
     const { title, descricao, meta } = body;
 
     const pool = await getDbConnection();
@@ -51,7 +47,10 @@ export async function POST(req: Request) {
     // Se já existir, retorna um erro
     if (existingConquest.recordset.length > 0) {
       console.warn(`Conquista com o título "${title}" já existe.`);
-      return NextResponse.json({ error: 'Já existe uma conquista com este título' }, { status: 409 });
+      return new NextResponse(
+        JSON.stringify({ error: 'Já existe uma conquista com este título' }),
+        { status: 409, headers: corsHeaders }
+      );
     }
 
     console.warn(`Conquista com o título "${title}" não existe. Iniciando criação...`);
@@ -66,13 +65,16 @@ export async function POST(req: Request) {
         VALUES (@title, @descricao, @meta);
       `);
 
-    const response = NextResponse.json({ message: 'Sucesso!' });
-    response.headers = headers;  
     // Retorna uma mensagem de sucesso
-    return NextResponse.json({ message: 'Conquista criada com sucesso' }, { status: 201 });
-
-    
+    return new NextResponse(
+      JSON.stringify({ message: 'Conquista criada com sucesso' }),
+      { status: 201, headers: corsHeaders }
+    );
   } catch (error) {
-    return new NextResponse({ error: 'Erro interno' }, { status: 500, headers });
+    console.error('Erro ao criar conquista:', error);
+    return new NextResponse(
+      JSON.stringify({ error: 'Erro interno ao criar conquista' }),
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
