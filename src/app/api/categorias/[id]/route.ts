@@ -4,6 +4,7 @@ import { error } from 'console';
 
 export async function GET(req: Request) {
   try {
+    const pool = await getDbConnection();
     const reqUrl = new URL(req.url);
     const pathname = reqUrl.pathname; // Obtém '/api/categorias/Livros'
     const lastPart = pathname.split('/').pop(); // Extrai 'Livros'
@@ -15,8 +16,6 @@ export async function GET(req: Request) {
         { status: 400 }
       );
     }
-
-    const pool = await getDbConnection();
 
     const result = await pool
       .request()
