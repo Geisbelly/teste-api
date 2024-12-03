@@ -3,7 +3,7 @@ import { getDbConnection } from '../../../../config/dbConfig';
 
 export async function GET(req: Request, context: { params: { id: string } }) {
   try {
-    const { id } = context.params;
+    const { id } = context.params;  // Acessando o parâmetro "id" de forma correta
 
     if (!id) {
       return NextResponse.json({ error: 'ID da categoria não fornecido' }, { status: 400 });
@@ -15,7 +15,7 @@ export async function GET(req: Request, context: { params: { id: string } }) {
       .input('id', id)
       .query(`
         SELECT * 
-        FROM CATEGORIA 
+        FROM CATEGORIAS 
         WHERE NOME = @id;
       `);
 
@@ -23,9 +23,9 @@ export async function GET(req: Request, context: { params: { id: string } }) {
       return NextResponse.json({ error: 'Categoria não encontrada' }, { status: 404 });
     }
 
-    const postagem = result.recordset[0];
+    const categoria = result.recordset[0];
 
-    return NextResponse.json(postagem);
+    return NextResponse.json(categoria);
 
   } catch (error) {
     console.error('Erro ao buscar categoria:', error);
