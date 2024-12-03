@@ -34,33 +34,4 @@ async function createConquista() {
   }
 }
 
-// // Função para buscar todas as conquistas
-// async function getConquistas() {
-//   try {
-//     // Enviar a requisição GET
-//     const response = await fetch('https://api-verbix.vercel.app/api/conquistas', {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     const responseText = await response.text();
-//     if (response.ok) {
-//       let result = {};
-//       try {
-//         result = JSON.parse(responseText);
-//       } catch (e) {
-//         console.error('Erro ao parsear JSON:', e);
-//       }
-//       console.log('Conquistas:', result);
-//     } else {
-//       console.error('Erro na requisição:', response.status, response.statusText, responseText);
-//     }
-//   } catch (error) {
-//     console.error('Erro ao fazer requisição:', error);
-//   }
-// }
-
-// Chama a função para criar a conquista
 export default createConquista;
