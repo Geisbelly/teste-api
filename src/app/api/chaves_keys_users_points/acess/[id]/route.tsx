@@ -14,6 +14,7 @@ export async function GET(req: Request) {
 
     const pool = await getDbConnection();
 
+
     const result = await pool.request()
       .input('id', id)
       .query(`

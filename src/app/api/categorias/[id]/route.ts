@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
+import { error } from 'console';
 
 export async function GET(req: Request) {
   try {
@@ -27,6 +28,7 @@ export async function GET(req: Request) {
       `);
 
     if (result.recordset.length === 0) {
+      console.log(error, 'Caregoria não encontrada')
       return NextResponse.json(
         { error: 'Categoria não encontrada' },
         { status: 404 }
