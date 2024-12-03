@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
 
+// Função POST para criar uma nova conquista
 export async function POST(req: Request) {
-  // Configuração básica de CORS
+  // Configuração de CORS
   const corsHeaders = {
     'Access-Control-Allow-Origin': 'http://localhost:3000', // Permite o frontend local
     'Access-Control-Allow-Methods': 'POST, OPTIONS', // Métodos permitidos
@@ -15,6 +16,7 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Extrai os dados da requisição
     const body = await req.json();
     const { title, descricao, meta } = body;
 
@@ -62,7 +64,7 @@ export async function POST(req: Request) {
   }
 }
 
-
+// Função GET para recuperar todas as conquistas
 export async function GET() {
   try {
     const pool = await getDbConnection();
@@ -79,4 +81,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Erro ao buscar os dados das conquistas' }, { status: 500 });
   }
 }
-

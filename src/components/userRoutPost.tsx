@@ -9,7 +9,7 @@ const data = {
 async function createConquista() {
   try {
     // Enviar a requisição POST
-    const response = await fetch('https://api-verbix.vercel.app/api/conquistas/', {
+    const response = await fetch('https://api-verbix.vercel.app/api/conquistas', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Indica que estamos enviando dados em JSON
@@ -17,12 +17,45 @@ async function createConquista() {
       body: JSON.stringify(data), // Convertendo o objeto JavaScript em JSON
     });
 
-    // Verifica se a requisição foi bem-sucedida
+    const responseText = await response.text(); // Lê a resposta como texto para debugar
     if (response.ok) {
-      const result = await response.json(); // Recebe a resposta JSON
+      let result = {};
+      try {
+        result = JSON.parse(responseText); // Tenta fazer o parse manualmente
+      } catch (e) {
+        console.error('Erro ao parsear JSON:', e);
+      }
       console.log('Conquista criada:', result);
     } else {
-      console.error('Erro na requisição:', response.status, response.statusText);
+      console.error('Erro na requisição:', response.status, response.statusText, responseText);
+    }
+  } catch (error) {
+    console.error('Erro ao fazer requisição:', error);
+  }
+}
+
+// Função para buscar todas as conquistas
+async function getConquistas() {
+  try {
+    // Enviar a requisição GET
+    const response = await fetch('https://api-verbix.vercel.app/api/conquistas', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseText = await response.text();
+    if (response.ok) {
+      let result = {};
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Erro ao parsear JSON:', e);
+      }
+      console.log('Conquistas:', result);
+    } else {
+      console.error('Erro na requisição:', response.status, response.statusText, responseText);
     }
   } catch (error) {
     console.error('Erro ao fazer requisição:', error);

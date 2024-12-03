@@ -11,10 +11,12 @@
   "dependencies": {
     "@azure/identity": "^4.5.0",
     "api_verbix": "file:",
+    "cors": "^2.8.5",
     "mssql": "^9.3.2",
     "next": "^15.0.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/mssql": "^9.1.5",
     "@types/node": "^20.17.9",
     "@types/react": "^18.3.12",
