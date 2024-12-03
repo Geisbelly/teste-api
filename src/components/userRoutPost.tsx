@@ -1,14 +1,12 @@
 const criarUsuario = async () => {
     // Dados do usuário
     const body = {
-        username: 'exemplo',
-        email: 'exemplo@dominio.com',
-        nome: 'Novo Usuário',
-        anonascimento: '2000-01-01',
-        avatar: 'Erica',
+        title: 'Mestre Leitor',
+        descricao: 'Leia 50 livros',
+        meta: 50,
       };
       
-      fetch('/api/users/post', {
+      fetch('/api/conquistas/post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
