@@ -1,10 +1,8 @@
-'use client'
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
 
-import * as React from 'react'
 
-export async function GET(context: { params: { id: string } }){
+export async function GET(req: Request, context: { params: { id: string } }){
   try {
     const { id } = await  context.params;
 
