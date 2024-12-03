@@ -5,6 +5,8 @@ import { getDbConnection } from '../../../config/dbConfig';
 
 
 export async function POST(req: Request) {
+
+  
   try {
     // Pegando os dados enviados no corpo da requisição
     const body = await req.json();

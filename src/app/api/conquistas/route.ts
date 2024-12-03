@@ -22,6 +22,18 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', '*'); // Permitir todos os domínios (substitua '*' por 'http://localhost:3000' para um domínio específico)
+  headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Verifique o método da requisição
+  if (req.method === 'OPTIONS') {
+    // Responde ao preflight request do CORS
+    return new NextResponse(null, { status: 200, headers });
+  }
+
   try {
     const body = await req.json();
 
@@ -54,11 +66,13 @@ export async function POST(req: Request) {
         VALUES (@title, @descricao, @meta);
       `);
 
+    const response = NextResponse.json({ message: 'Sucesso!' });
+    response.headers = headers;  
     // Retorna uma mensagem de sucesso
     return NextResponse.json({ message: 'Conquista criada com sucesso' }, { status: 201 });
 
+    
   } catch (error) {
-    console.error('Erro ao criar conquista:', error);
-    return NextResponse.json({ error: 'Erro ao criar conquista' }, { status: 500 });
+    return new NextResponse({ error: 'Erro interno' }, { status: 500, headers });
   }
 }
