@@ -5,7 +5,7 @@ export default function Home() {
 
   return (
     <div>
-      <button onClick={criarUsuario} className='w-4 h-4'>Clique</button>
+      <button onClick={criarUsuario} className='align-center justify-center'>Clique</button>
     </div>
   );
 }

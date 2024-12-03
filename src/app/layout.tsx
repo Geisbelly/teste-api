@@ -3,12 +3,11 @@ import React from 'react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>My Next.js App</title>
-        {/* Adicione outras tags <head> conforme necessário */}
+        <title>My API Verbix</title>
       </head>
       <body>
         {children}
