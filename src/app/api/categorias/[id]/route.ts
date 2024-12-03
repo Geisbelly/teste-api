@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../../config/dbConfig';
 
-
-export async function GET(req: Request, context: { params: { id: string } }){
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await  context.params;
+    const { id } = await params; // Acessa diretamente o 'id' sem precisar de 'await'
 
     if (!id) {
       return NextResponse.json({ error: 'ID da categoria não fornecido' }, { status: 400 });

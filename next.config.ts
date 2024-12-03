@@ -1,7 +1,6 @@
 // next.config.js
 const nextConfig = {
   reactStrictMode: true, // Habilita o modo estrito para identificar problemas no React
-  swcMinify: true, // Utiliza o SWC para minificação (não é mais necessário definir explicitamente a minificação, mas você pode manter se quiser)
   env: {
     DB_USER: process.env.DB_USER,
     DB_PASSWORD: process.env.DB_PASSWORD,
@@ -21,6 +20,7 @@ const nextConfig = {
       },
     ];
   },
+  
 };
 
 export default nextConfig; // Exportação correta para Next.js 13+
