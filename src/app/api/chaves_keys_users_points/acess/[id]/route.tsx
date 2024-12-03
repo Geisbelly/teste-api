@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
+import { NextApiRequest } from 'next';
 import { getDbConnection } from '../../../../../config/dbConfig';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+type Params = {
+  id: string;
+};
+
+export async function GET(request: NextApiRequest, { params }: { params: Params }) {
   try {
     const { id } = params;
 
