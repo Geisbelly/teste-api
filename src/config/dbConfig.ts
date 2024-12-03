@@ -8,8 +8,8 @@ const dbConfig = {
   options: {
     encrypt: true, // Necessário para Azure
     trustServerCertificate: true, // Pode ser necessário para evitar problemas de certificado
-    connectionTimeout: 60000, // Timeout de conexão para garantir que não falhe facilmente
-    responseLimit: '18mb', // Ajuste para o limite de resposta se necessário
+    connectionTimeout: 120000, // Timeout de conexão para garantir que não falhe facilmente
+    responseLimit: '50mb', // Ajuste para o limite de resposta se necessário
   },
 };
 

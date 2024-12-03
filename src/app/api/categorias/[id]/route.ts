@@ -17,7 +17,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         SELECT * 
         FROM CATEGORIA
         WHERE NOME = @id;
-      `);
+      `)
+
 
     if (result.recordset.length === 0) {
       return NextResponse.json({ error: 'Categoria não encontrada' }, { status: 404 });
