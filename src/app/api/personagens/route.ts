@@ -1,27 +1,27 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
 
+interface params {
+  NOME: string;
+}
+
 export async function GET(req: Request) {
   try {
-    const url = new URL(req.url); // Criando uma instância da URL
-    const nome = url.searchParams.get('NOME'); // Obtendo o parâmetro 'NOME'
-    console.log('Parâmetro NOME:', nome); // Verificação no log
-    console.log('URL:', url); // Verificação no log
+    const url = new URL(req.url);
+    const nome = url.searchParams.get('NOME');
+    console.log('Parametro NOME:', nome);
 
     const pool = await getDbConnection();
     let query = 'SELECT * FROM PERSONAGENS';
+    const params: params = { NOME: nome || '' };  // Se 'nome' for nulo, define como string vazia
 
-    const request = pool.request();
-
-    // Adiciona filtro se o parâmetro 'NOME' for fornecido
     if (nome) {
-      query += ' WHERE NOME = @NOME';
-      request.input('NOME', nome.trim());
+      query += ' WHERE LOWER(NOME) = LOWER(@NOME)';
     }
 
-    console.log('Query Gerada:', query); // Verificação no log
-
-    const result = await request.query(query);
+    const result = await pool.request()
+      .input('NOME', params.NOME)
+      .query(query);
 
     // Processar os resultados
     const processedResult = result.recordset.map(item => ({
@@ -29,9 +29,7 @@ export async function GET(req: Request) {
       IMGS: JSON.parse(item.IMGS.replace(/\\/g, '')) // Tratando imagens no JSON
     }));
 
-    console.log('Resultado Retornado:', processedResult); // Verificação no log
-
-    return NextResponse.json(processedResult); // Retorna os dados filtrados
+    return NextResponse.json(processedResult);  // Retorna os dados
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
