@@ -5,7 +5,7 @@ import { getDbConnection } from '../../../config/dbConfig';
 export async function POST(req: Request) {
   // Configuração de CORS
   const corsHeaders = {
-    'Access-Control-Allow-Origin': 'http://localhost:3000', // Permite o frontend local
+    'Access-Control-Allow-Origin': '*', // Permite o frontend local
     'Access-Control-Allow-Methods': 'POST, OPTIONS', // Métodos permitidos
     'Access-Control-Allow-Headers': 'Content-Type', // Cabeçalhos permitidos
   };
