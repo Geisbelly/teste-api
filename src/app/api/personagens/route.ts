@@ -1,31 +1,32 @@
 import { NextResponse } from 'next/server';
 import { getDbConnection } from '../../../config/dbConfig';
 
-// Função GET: Buscar todos os dados ou um específico com base no parâmetro NOME
 export async function GET(req: Request) {
   try {
-    // Obtendo o parâmetro 'NOME' diretamente da URL
-    const url = new URL(req.url);  // Criando uma instância da URL
-    const nome = url.searchParams.get('NOME');  // Obtendo o parâmetro 'NOME'
-    console.log(url, nome)
+    const url = new URL(req.url); // Criando uma instância da URL
+    const nome = url.searchParams.get('NOME'); // Obtendo o parâmetro 'NOME'
+    console.log(nome)
+    console.log(url)
 
     const pool = await getDbConnection();
     let query = 'SELECT * FROM PERSONAGENS';
     let params = {};
 
+    // Adiciona filtro se o parâmetro 'NOME' for fornecido
     if (nome) {
-      query += ' WHERE NOME = @nome';
-      params = { nome }; // Não é necessário converter, pois 'NOME' é string
+      query += ' WHERE LOWER(NOME) = LOWER(@nome)';
+      params = { nome };
     }
 
     const result = await pool.request().input('nome', params.nome).query(query);
 
+    // Processar os resultados
     const processedResult = result.recordset.map(item => ({
       ...item,
-      IMGS: JSON.parse(item.IMGS.replace(/\\/g, ''))
+      IMGS: JSON.parse(item.IMGS.replace(/\\/g, '')) // Tratando imagens no JSON
     }));
 
-    return NextResponse.json(processedResult);
+    return NextResponse.json(processedResult); // Retorna os dados
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
@@ -33,7 +34,6 @@ export async function GET(req: Request) {
   }
 }
 
-// Função POST: Criar novo dado
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -58,22 +58,22 @@ export async function POST(req: Request) {
   }
 }
 
-// Função PUT: Atualizar dado existente
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { nome, tipo, descricao, imgs } = body;
+    const { id, nome, tipo, descricao, imgs } = body;
 
     const pool = await getDbConnection();
     const result = await pool.request()
+      .input('id', id)
       .input('nome', nome)
       .input('tipo', tipo)
       .input('descricao', descricao)
       .input('imgs', imgs)
       .query(`
         UPDATE PERSONAGENS 
-        SET TIPO = @tipo, DESCRICAO = @descricao, IMGS = @imgs 
-        WHERE NOME = @nome;
+        SET NOME = @nome, TIPO = @tipo, DESCRICAO = @descricao, IMGS = @imgs 
+        WHERE ID = @id;
       `);
 
     if (result.rowsAffected[0] === 0) {
@@ -88,16 +88,15 @@ export async function PUT(req: Request) {
   }
 }
 
-// Função DELETE: Excluir dado
 export async function DELETE(req: Request) {
   try {
     const body = await req.json();
-    const { nome } = body;
+    const { id } = body;
 
     const pool = await getDbConnection();
     const result = await pool.request()
-      .input('nome', nome)
-      .query(`DELETE FROM PERSONAGENS WHERE NOME = @nome;`);
+      .input('id', id)
+      .query(`DELETE FROM PERSONAGENS WHERE ID = @id;`);
 
     if (result.rowsAffected[0] === 0) {
       return NextResponse.json({ error: 'Personagem não encontrado' }, { status: 404 });
