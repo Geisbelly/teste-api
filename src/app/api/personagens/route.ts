@@ -7,6 +7,7 @@ export async function GET(req: Request) {
     // Obtendo o parâmetro 'NOME' diretamente da URL
     const url = new URL(req.url);  // Criando uma instância da URL
     const nome = url.searchParams.get('NOME');  // Obtendo o parâmetro 'NOME'
+    console.log(url, nome)
 
     const pool = await getDbConnection();
     let query = 'SELECT * FROM PERSONAGENS';
