@@ -5,20 +5,23 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url); // Criando uma instância da URL
     const nome = url.searchParams.get('NOME'); // Obtendo o parâmetro 'NOME'
-    console.log(nome)
-    console.log(url)
+    console.log('Parâmetro NOME:', nome); // Verificação no log
+    console.log('URL:', url); // Verificação no log
 
     const pool = await getDbConnection();
     let query = 'SELECT * FROM PERSONAGENS';
-    let params = {};
+
+    const request = pool.request();
 
     // Adiciona filtro se o parâmetro 'NOME' for fornecido
     if (nome) {
-      query += ' WHERE LOWER(NOME) = LOWER(@nome)';
-      params = { nome };
+      query += ' WHERE NOME = @NOME';
+      request.input('NOME', nome.trim());
     }
 
-    const result = await pool.request().input('nome', params.nome).query(query);
+    console.log('Query Gerada:', query); // Verificação no log
+
+    const result = await request.query(query);
 
     // Processar os resultados
     const processedResult = result.recordset.map(item => ({
@@ -26,13 +29,16 @@ export async function GET(req: Request) {
       IMGS: JSON.parse(item.IMGS.replace(/\\/g, '')) // Tratando imagens no JSON
     }));
 
-    return NextResponse.json(processedResult); // Retorna os dados
+    console.log('Resultado Retornado:', processedResult); // Verificação no log
+
+    return NextResponse.json(processedResult); // Retorna os dados filtrados
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error);
     return NextResponse.json({ error: 'Erro ao buscar os dados' }, { status: 500 });
   }
 }
+
 
 export async function POST(req: Request) {
   try {
